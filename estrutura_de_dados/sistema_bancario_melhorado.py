@@ -52,7 +52,7 @@ def exibir_extrato(saldo, /, *, extrato):
     if not extrato:
         print("#### Não houveram movimentações ####")
     else:
-        extrato
+        print(extrato) 
         print(f"==== Saldo: R$ {saldo:.2f} ====")
 
 
