@@ -1,62 +1,55 @@
 menu = """
-Digite as opções abaixo para utilizar o sistema bancário:
-
-Opção - Descrição
-[d] - Depositar.
-[s] - Sacar.
-[e] - Extrato
-[q] - Sair
-\n
-
+[d] = Depositar
+[s] = Sacar
+[e] = Extrato
+[q] = Sair
+===> 
 """
 
+LIMITE = 500
 saldo = 0
-LIMITE_SAQUE = 500
-quantidade_saques = 0
+quantidade_saque = 0
 lista_extrato = []
 
-def depositar(valor):
-    global saldo
-    saldo += valor
-    deposito = f'Depósito : R$ {valor:.2f}\n'
-    lista_extrato.append(deposito)
-    return deposito
-
-def sacar(valor):
-    global saldo, quantidade_saques
-
-    if quantidade_saques >= 3:
-        return 'O Limite é de 3 saques diários.'
-    elif valor > LIMITE_SAQUE:
-        return 'Valor máximo de saque é R$ 500,00.'
-    elif valor > saldo:
-        return 'Você não tem saldo suficiente!'
-    else:
-        saldo -= valor
-        saque = f'Saque: R$ {valor:.2f}'
-        quantidade_saques += 1
-        lista_extrato.append(saque)
-        return saque
-
-def extrato():
-    for item in lista_extrato:
-        print(item)
-    print(f'O Seu saldo é: R$ {saldo:.2f}')
-
 while True:
-    opcao = input(menu).lower()
 
-    if opcao == 'd':
-        valor = float(input('\nDigite o valor do deposito: '))
-        print(depositar(valor))
+    resposta = input(menu)
 
-    elif opcao == 's':
-        valor = float(input('\nDigite o valor do saque: '))
-        print(sacar(valor))
+    if resposta == "s":
+        valor = float(input("Digite o valor do saque: \n"))
+        excede_limite = valor > LIMITE
+        excede_saque = quantidade_saque > 3
+        excede_saldo = valor > saldo
 
-    elif opcao == 'e':
-        extrato()
+        if excede_limite:
+            print("Valor precisa ser menor que R$ 500.00!")
+        elif excede_saque:
+            print("Número de saques excedido!")
+        elif excede_saldo:
+            print("Valor precisa ser menor que o saldo!")
+        elif valor > 0:
+            saldo -= valor
+            quantidade_saque += 1
+            saque = f"Saque: R$ {valor:.2f}!"
+            lista_extrato.append(saque)
+            print(saque)
+    
+    elif resposta == "d":
+        valor = float(input("Digite o valor do deposito: \n"))
 
-    elif opcao == 'q':
-        print('Até mais!\n')
+        if valor > 0:
+            saldo += valor
+            deposito = f"Depósito: R$ {valor:.2f}!"
+            lista_extrato.append(deposito)
+            print(len(lista_extrato))
+            print(deposito)
+
+    elif resposta == "e":
+        if not len(lista_extrato) > 0:
+            print("Não houveram moviemntações na conta!")
+        for transacoes in lista_extrato:
+            print(transacoes)
+        print(f"Saldo total: R$ {saldo:.2f}!")
+
+    elif resposta == "q":
         break
